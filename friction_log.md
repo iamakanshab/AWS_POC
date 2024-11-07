@@ -1,5 +1,6 @@
 # EKS Monitoring Stack Setup Friction Log
 Date: November 7, 2024
+Author: Akansha Bansal
 
 ## Initial Setup Phase
 
@@ -9,6 +10,7 @@ Date: November 7, 2024
 - Node exporter automatically deployed
 - Metrics collection started immediately
 - Prometheus server and exporters running successfully
+
 
 ❌ **Friction Points**:
 - Initial resource constraints caused pending pods
@@ -60,6 +62,54 @@ Date: November 7, 2024
 - Complex ALB security group identification process
 - Had to modify approach for SSL certificates
 
+
+### 5. OIDC Provider Setup
+✅ **What Worked Well**:
+- Identified existing EKS OIDC provider
+- Clear process for adding GitHub OIDC provider
+- Successful provider creation
+
+❌ **Friction Points**:
+- Initial confusion between EKS and GitHub OIDC providers
+- Required specific thumbprint for GitHub provider
+- Required understanding of OIDC authentication flow
+
+### 6. IAM Role Configuration
+✅ **What Worked Well**:
+- Successfully created IAM role
+- Proper trust relationship established
+- Correct permissions set for EKS access
+
+❌ **Friction Points**:
+- Initial role creation failed without proper trust policy
+- Complex permission requirements for EKS and ECR
+- Needed multiple iterations to get permissions right
+
+### 7. GitHub Actions Setup
+
+### 1. Workflow Configuration
+✅ **What Worked Well**:
+- Basic workflow structure established
+- AWS credentials integration
+- Docker build and push steps
+
+❌ **Major Friction Points**:
+- Required specific permissions in workflow
+- Complex environment variable management
+- Needed proper secrets configuration
+
+### 8. Repository Structure
+✅ **What Worked Well**:
+- Clear directory structure (.github/workflows)
+- Kubernetes manifests organization
+- Dockerfile placement
+
+❌ **Friction Points**:
+- Manual creation of directory structure needed
+- Required specific file naming conventions
+- Needed proper GitHub secrets setup
+
+
 ## Technical Challenges Encountered
 
 1. **ALB Controller Issues**:
@@ -83,6 +133,28 @@ An error occurred when trying to identify ALB security groups
 - Root Cause: Complex ALB naming and permission issues
 - Solution: Improved security group lookup logic
 
+4. **OIDC Configuration**:
+```json
+{
+    "OpenIDConnectProviderList": [
+        {
+            "Arn": "arn:aws:iam::692859939525:oidc-provider/oidc.eks.us-west-2.amazonaws.com/id/01D93CF087B8DA3C84FBA80BCAAAD15E"
+        }
+    ]
+}
+```
+- Root Cause: Only EKS OIDC provider present
+- Solution: Added GitHub Actions OIDC provider
+
+5. **Role Trust Relationship**:
+```json
+"Principal": {
+    "Federated": "arn:aws:iam::${AWS_ACCOUNT_ID}:oidc-provider/token.actions.githubusercontent.com"
+}
+```
+- Root Cause: Incorrect federation setup
+- Solution: Updated trust policy with correct provider
+
 ## Recommendations for Future Deployments
 
 ### Infrastructure Preparation
@@ -90,6 +162,16 @@ An error occurred when trying to identify ALB security groups
 2. Ensure proper IAM roles and service accounts
 3. Configure appropriate resource requests/limits
 4. Plan domain names and SSL strategy beforehand
+5. Set up OIDC providers first
+6. Create roles with proper trust relationships
+7. Test permissions before workflow setup
+8. Document role ARNs and configurations
+
+### GitHub Configuration
+1. Initialize repository structure first
+2. Set up secrets before workflow creation
+3. Test workflow with minimal deployment
+4. Add complexity incrementally
 
 ### Security Setup
 1. Use custom domain names instead of ALB DNS
@@ -102,6 +184,12 @@ An error occurred when trying to identify ALB security groups
 2. Use explicit health check configurations
 3. Configure security groups upfront
 4. Implement proper backup strategy early
+
+### Documentation Needs
+1. OIDC provider setup steps
+2. Role configuration guide
+3. Workflow troubleshooting guide
+4. Deployment verification steps
 
 ## Follow-up Tasks
 
@@ -129,13 +217,22 @@ An error occurred when trying to identify ALB security groups
 3. Basic monitoring operational ✅
 4. Load balancer controller functioning ✅
 5. Basic security implemented ✅
+6. Automated deployment working ✅
+7. OIDC authentication successful ✅
+8. Role permissions correct ✅
+9. Workflow executing properly ✅
+
 
 ## Time Investment
 - Initial setup: 1 hour
 - Troubleshooting: 2 hours
 - Security implementation: 1 hour
 - Final configuration: 1 hour
-Total: ~5 hours
+- OIDC Setup: 30 minutes
+- Role Configuration: 30 minutes
+- Workflow Setup: 1 hour
+- Testing and Validation: 1 hour
+Total: ~8 hours
 
 ## Key Learnings
 1. Always start with minimal configurations
@@ -146,7 +243,20 @@ Total: ~5 hours
 6. Consider DNS name length limitations
 7. Test security configurations incrementally
 
+
 ## Next Steps
+
+### Security
+- [ ] Implement role permission boundaries
+- [ ] Add deployment approvals
+- [ ] Set up secret rotation
+- [ ] Implement security scanning
+### CI/CD
+- [ ] Add testing steps
+- [ ] Implement staging environment
+- [ ] Add deployment validation
+- [ ] Set up rollback procedures
+
 1. Implement custom domain names
 2. Set up proper SSL certificates
 3. Configure comprehensive monitoring dashboards
@@ -159,4 +269,14 @@ Total: ~5 hours
 3. Monitoring dashboard templates
 4. Incident response procedures
 5. Change management process
+6. Rollback strategies
+7. Environment separation
+8. Security best practices
+9. Monitoring integration
 
+## Workflow Improvements Needed
+1. Add error handling
+2. Implement timeout configurations
+3. Add deployment validations
+4. Include notification systems
+5. Add performance monitoring
