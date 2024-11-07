@@ -1,7 +1,7 @@
 # EKS and GitHub Actions Integration: Complete Setup Guide
 Document Version: 1.0
 Last Updated: November 7, 2024
-Author: System Administrator
+Author: Akansha Bansal 
 
 ## Table of Contents
 1. Introduction
