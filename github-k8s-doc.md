@@ -314,9 +314,3 @@ kubectl port-forward -n monitoring svc/prometheus-server 9090:80
 - [ ] Network policies in place
 - [ ] Monitoring alerts configured
 - [ ] Secrets properly managed
-
-Would you like me to:
-1. Add more detailed troubleshooting steps?
-2. Include additional security configurations?
-3. Add specific monitoring dashboards?
-4. Expand the maintenance procedures?
