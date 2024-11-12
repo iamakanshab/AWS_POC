@@ -34,13 +34,13 @@ check_prerequisites() {
     if ! command -v aws &> /dev/null; then
         print_error "aws cli is not installed"
         exit 1
-    }
+    fi
     
     # Check if we can access the cluster
     if ! kubectl get nodes &> /dev/null; then
         print_error "Cannot access Kubernetes cluster"
         exit 1
-    }
+    fi
 }
 
 fix_vpc_cni() {
