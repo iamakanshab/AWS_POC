@@ -113,4 +113,4 @@ If issues persist:
    kubectl delete pods -n kube-system -l k8s-app=aws-node
 EOF
 
-print_section "Script Complete"
+print_section "Debug Complete"
